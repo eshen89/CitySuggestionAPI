@@ -29,6 +29,7 @@ public class CityRawDataProcessor {
   private final ObjectReader objReader = new ObjectMapper().reader();
 
   public void processFile(String inputFilePath, String outputFilePath) {
+    log.info("Starting process input file: {}", inputFilePath);
     Optional.of(inputFilePath)
         .map(this::readFromFile)
         .ifPresent(properties -> {
@@ -111,6 +112,7 @@ public class CityRawDataProcessor {
   }
 
   private void saveToFile(Properties properties, String outputFilePath) throws IOException {
+    log.info("Properties is saving to {}", outputFilePath);
     properties.store(new FileOutputStream(outputFilePath), null);
   }
 }
