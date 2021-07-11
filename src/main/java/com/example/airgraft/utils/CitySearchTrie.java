@@ -37,6 +37,10 @@ public class CitySearchTrie {
     ptr.geoIds.add(city.getGeoNameId());
   }
 
+  public boolean isEmpty() {
+    return root.children.isEmpty();
+  }
+
   public List<Integer> suggest(String cityNamePrefix) {
     CityTrieNode parent = searchParent(cityNamePrefix.toLowerCase(Locale.ROOT));
     return dfs(parent);
