@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Slf4j
 @Configuration
@@ -20,14 +21,15 @@ public class CityHashMapConfig {
   private final CityRawDataProcessor cityRawDataProcessor;
 
   @Bean
+  @DependsOn(value = {"cityRawDataProcessor"})
   public CityHashMap cityHashMap() {
-    log.info("Initializing CityHashMap bean......");
+    log.info("Initializing CityHashMap bean...");
     var cityHashMap = new CityHashMap();
     Map<Integer, City> caCityMap = cityRawDataProcessor.readFromProperties(CA_PROPERTIES_PATH);
     Map<Integer, City> usCityMap = cityRawDataProcessor.readFromProperties(US_PROPERTIES_PATH);
     cityHashMap.getCityMap().putAll(caCityMap);
     cityHashMap.getCityMap().putAll(usCityMap);
-    log.info("Done, CityHashMap size: {}.", caCityMap.size());
+    log.info("Done, CityHashMap size: {}.", cityHashMap.getCityMap().size());
     return cityHashMap;
   }
 

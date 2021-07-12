@@ -22,7 +22,7 @@ public class CitySearchTrieConfig {
   @Bean
   @DependsOn(value = {"cityHashMap"})
   public CitySearchTrie citySearchTrie() {
-    log.info("Initializing CitySearchTrie bean......");
+    log.info("Initializing CitySearchTrie bean...");
     var citySearchTrie = new CitySearchTrie();
     var cityHashMap = (CityHashMap) applicationContext.getBean("cityHashMap");
     List<City> cityList = new LinkedList<>(cityHashMap.getCityMap().values());

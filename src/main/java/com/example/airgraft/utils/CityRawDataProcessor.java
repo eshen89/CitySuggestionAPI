@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Scanner;
+import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,9 +25,20 @@ import org.springframework.stereotype.Component;
 public class CityRawDataProcessor {
 
   private static final String TAB_DELIMITER = "\t";
+  private static final String CA_FILE_INPUT_PATH = "src/main/resources/static/CA.txt";
+  private static final String US_FILE_INPUT_PATH = "src/main/resources/static/US.txt";
+  private static final String CA_FILE_OUTPUT_PATH = "src/main/resources/static/CA_map.properties";
+  private static final String US_FILE_OUTPUT_PATH = "src/main/resources/static/US_map.properties";
 
   private final ObjectWriter objWriter = new ObjectMapper().writer();
   private final ObjectReader objReader = new ObjectMapper().reader();
+
+  @PostConstruct
+  public void init() {
+    log.info("Processing raw data files...");
+    processFile(CA_FILE_INPUT_PATH, CA_FILE_OUTPUT_PATH);
+    processFile(US_FILE_INPUT_PATH, US_FILE_OUTPUT_PATH);
+  }
 
   public void processFile(String inputFilePath, String outputFilePath) {
     log.info("Starting process input file: {}", inputFilePath);
@@ -66,7 +78,7 @@ public class CityRawDataProcessor {
       input.useDelimiter(TAB_DELIMITER);
       input.useLocale(Locale.ENGLISH);
 
-      log.info("Processing raw city data.......");
+      log.info("Processing raw city data from {}...", inputFilePath);
 
       while (input.hasNext()) {
         var geoNameId = input.nextInt();
