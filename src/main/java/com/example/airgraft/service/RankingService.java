@@ -36,28 +36,27 @@ public class RankingService {
   private Map<Integer, java.lang.Double> rankByCoordinates(double latitude, double longitude, List<City> candidates) {
     Map<Integer, java.lang.Double> scoreMap = new LinkedHashMap<>();
     var basePoint = new Point2D.Double(latitude, longitude);
-    var distanceRange = findDistanceRange(basePoint, candidates);
+    var maxRange = findMaxRange(basePoint, candidates);
 
     candidates.forEach(city -> {
       var candidatePoint = new Point2D.Double(city.getLatitude(), city.getLongitude());
       double distance = basePoint.distance(candidatePoint);
-      var relevanceScore = BigDecimal.valueOf(distance).divide(BigDecimal.valueOf(distanceRange), 2, RoundingMode.HALF_UP);
+      var relevanceScore = BigDecimal.ONE
+          .subtract(BigDecimal.valueOf(distance).divide(maxRange, 2, RoundingMode.HALF_UP));
       scoreMap.put(city.getGeoNameId(), relevanceScore.doubleValue());
     });
     return scoreMap;
   }
 
-  private double findDistanceRange(Point2D.Double base, List<City> candidates) {
-    var minDistance = Double.MAX_VALUE;
+  private BigDecimal findMaxRange(Point2D.Double base, List<City> candidates) {
     var maxDistance = 0d;
 
     for(City city: candidates) {
       var candidatePoint = new Point2D.Double(city.getLatitude(), city.getLongitude());
       double distance = Math.abs(base.distance(candidatePoint));
-      minDistance = Double.min(minDistance, distance);
       maxDistance = Double.max(maxDistance, distance);
     }
-    return BigDecimal.valueOf(maxDistance).subtract(BigDecimal.valueOf(minDistance)).doubleValue();
+    return BigDecimal.valueOf(maxDistance);
   }
 
 }

@@ -6,6 +6,7 @@ import com.example.airgraft.model.pojo.City;
 import com.example.airgraft.service.RankingService;
 import com.example.airgraft.service.SuggestionService;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,8 @@ public class SuggestionController {
         .map(suggestionService::suggest)
         .map(suggestedMap -> {
           if (!suggestedMap.isEmpty()) {
-            return rankingService.rank(query, latitude, longitude, (List<City>) suggestedMap.values());
+            List<City> suggestedCities = new LinkedList<>(suggestedMap.values());
+            return rankingService.rank(query, latitude, longitude, suggestedCities);
           }
           return new HashMap<Integer, Double>();
         })
