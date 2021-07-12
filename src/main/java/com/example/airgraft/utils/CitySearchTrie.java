@@ -5,9 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import org.springframework.stereotype.Component;
 
-@Component
 public class CitySearchTrie {
 
   private final CityTrieNode root;

@@ -21,7 +21,7 @@ public class SuggestionController {
   private final SuggestionResultConverter suggestionResultConverter;
 
   @GetMapping("/suggestion")
-  public ResponseEntity<SuggestionResponseDTO> helloWorld(@RequestParam(name = "q", required = false) String query,
+  public ResponseEntity<SuggestionResponseDTO> helloWorld(@RequestParam(name = "q") String query,
       @RequestParam(name = "lat", required = false) Double latitude,
       @RequestParam(name = "long", required = false) Double longitude) {
     List<SuggestResult> resultList = suggestionService.suggest(query, latitude, longitude);

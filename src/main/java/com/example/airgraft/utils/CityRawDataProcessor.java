@@ -42,6 +42,7 @@ public class CityRawDataProcessor {
   }
 
   public Map<Integer, City> readFromProperties(String propertiesFilePath) {
+    log.info("Reading properties from {}", propertiesFilePath);
     Map<Integer, City> cityMap = new LinkedHashMap<>();
     var properties = new Properties();
     return Optional.of(propertiesFilePath)
