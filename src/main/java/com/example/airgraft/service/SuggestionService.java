@@ -1,9 +1,12 @@
 package com.example.airgraft.service;
 
-import com.example.airgraft.model.SuggestResult;
+import com.example.airgraft.model.pojo.City;
 import com.example.airgraft.utils.CityHashMap;
 import com.example.airgraft.utils.CitySearchTrie;
-import java.util.List;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +26,15 @@ public class SuggestionService {
     this.citySearchTrie = citySearchTrie;
   }
 
-  public List<SuggestResult> suggest(String query, Double longitude, Double latitude) {
-    return null;
+  public Map<Integer, City> suggest(String query) {
+    return Optional.of(query)
+        .map(citySearchTrie::suggest)
+        .map(suggestedGeoIds -> {
+          Map<Integer, City> suggestedMap = new LinkedHashMap<>();
+          suggestedGeoIds.forEach(key -> suggestedMap.put(key, cityHashMap.getCityMap().get(key)));
+          return suggestedMap;
+        })
+        .orElse(Collections.emptyMap());
   }
+
 }
