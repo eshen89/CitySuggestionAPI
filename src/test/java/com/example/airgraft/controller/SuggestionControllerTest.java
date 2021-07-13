@@ -8,10 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.airgraft.converter.SuggestionResultConverter;
-import com.example.airgraft.model.SuggestResult;
+import com.example.airgraft.model.pojo.City;
+import com.example.airgraft.service.RankingService;
 import com.example.airgraft.service.SuggestionService;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,14 +28,18 @@ class SuggestionControllerTest {
   @MockBean
   private SuggestionService suggestionService;
   @MockBean
+  private RankingService rankingService;
+  @MockBean
   private SuggestionResultConverter suggestionResultConverter;
 
   @Test
   void suggestionAPITest200() throws Exception {
-    List<SuggestResult> expected = new LinkedList<>();
-    when(suggestionService.suggest(any(), any(), any())).thenReturn(expected);
+    Map<Integer, City> suggested = new LinkedHashMap<>();
+    Map<Integer, Double> ranked = new LinkedHashMap<>();
+    suggested.put(123, new City());
+    when(suggestionService.suggest(any())).thenReturn(suggested);
+    when(rankingService.rank(any(), any(), any(), any())).thenReturn(ranked);
     doCallRealMethod().when(suggestionResultConverter).convert(any());
-
 
     this.mockMvc.perform(get("/suggestion")
           .queryParam("q", "test")
@@ -46,10 +51,6 @@ class SuggestionControllerTest {
 
   @Test
   void suggestionAPITest400() throws Exception {
-    List<SuggestResult> expected = new LinkedList<>();
-    when(suggestionService.suggest(any(), any(), any())).thenReturn(expected);
-    doCallRealMethod().when(suggestionResultConverter).convert(any());
-
     this.mockMvc.perform(get("/suggestion"))
         .andDo(print())
         .andExpect(status().isBadRequest());
