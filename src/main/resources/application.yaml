@@ -1,0 +1,8 @@
+spring:
+  main:
+    web-application-type: servlet
+
+city:
+  input:
+    CA: "src/main/resources/static/CA.txt"
+    US: "src/main/resources/static/US.txt"
