@@ -49,7 +49,7 @@ This API doesn't support suffix searching, put city suffix may return undesired 
   - Some parameters help to narrow down the search area, for instance `country_code` `zipcode` `radius`
 - Sketch out a design for per user API keys and billing for our future city-suggestion-service startup. 
   What are the implications for scalability of your implementation?
-  - Please see attached illustration diagram
+  - Please see `/CitySuggestionAPI/src/main/resources/images/api_billing_model.jpg`
 
 ### Libraries
 
