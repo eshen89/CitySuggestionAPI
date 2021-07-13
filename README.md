@@ -9,6 +9,7 @@
    - [US.zip](http://download.geonames.org/export/dump/US.zip)
 3. Unzip packages then move `XX.txt` under `/CitySuggestionAPI/src/main/resources/static` directory, the directory should contain `CA.txt` and `US.txt`
 4. Run `mvn spring-boot:run`
+5. Depends on the host machine, the start up process may take up to 30~45 seconds
 
 ### API
 ```HTTP GET /suggestion?q=Toronto&lat=43.6&long=-79.666```
@@ -51,6 +52,13 @@ This API doesn't support suffix searching, put city suffix may return undesired 
 - Sketch out a design for per user API keys and billing for our future city-suggestion-service startup. 
   What are the implications for scalability of your implementation?
   - Please see `/CitySuggestionAPI/src/main/resources/images/api_billing_model.jpg`
+
+### Limitation & Thoughts
+
+- This API doesn't support suffix because it uses simple SearchTrie to match prefix search query, 
+  the original design I had is to introduce wild card character, and allow the trie to be able to skip and callback to certain sub-trie.
+- Have paginated result to make it more user-friendly.
+- Server boot time could be much lesser than this design if I could segment the raw file into chunk files and process them in parallel.
 
 ### Libraries
 
