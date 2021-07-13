@@ -4,7 +4,7 @@ import static java.util.Collections.emptyList;
 
 import com.example.airgraft.model.SuggestResult;
 import com.example.airgraft.model.dto.SuggestionResponseDTO;
-import com.example.airgraft.utils.CityHashMap;
+import com.example.airgraft.utils.CityMapProcessor;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,14 +16,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SuggestionResultConverter {
 
-  private final CityHashMap cityHashMap;
+  private final CityMapProcessor cityMapProcessor;
 
   public SuggestionResponseDTO convert(Map<Integer, Double> rankingResult) {
     SuggestionResponseDTO dto = SuggestionResponseDTO.builder().suggestions(emptyList()).build();
     if (!rankingResult.isEmpty()) {
       List<SuggestResult> suggestResults = new LinkedList<>();
       rankingResult.keySet().forEach(key -> {
-        var city = cityHashMap.getCityMap().get(key);
+        var city = cityMapProcessor.getCityMap().get(key);
         var suggestResult = SuggestResult.builder()
             .name(city.getName().concat(" ").concat(city.getCountryCode()))
             .latitude(city.getLatitude())
