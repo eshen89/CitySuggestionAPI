@@ -19,7 +19,7 @@
 | lat  | Latitude  | Double | False
 | long  | Longitude  | Double | False
 
-#### Response:
+#### Sample Response:
 ```
 {
     "suggestions": [
@@ -36,6 +36,7 @@
             "score": 0.99
         }
     ]
+}
 ```
 Note: 
 
