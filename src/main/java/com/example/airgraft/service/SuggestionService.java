@@ -1,7 +1,7 @@
 package com.example.airgraft.service;
 
 import com.example.airgraft.model.pojo.City;
-import com.example.airgraft.utils.CityHashMap;
+import com.example.airgraft.utils.CityMapProcessor;
 import com.example.airgraft.utils.CitySearchTrie;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -18,11 +18,11 @@ import org.springframework.stereotype.Service;
 public class SuggestionService {
 
   private CitySearchTrie citySearchTrie;
-  private CityHashMap cityHashMap;
+  private CityMapProcessor cityMapProcessor;
 
   @Autowired
-  public SuggestionService(final CitySearchTrie citySearchTrie, final CityHashMap cityHashMap) {
-    this.cityHashMap = cityHashMap;
+  public SuggestionService(final CitySearchTrie citySearchTrie, final CityMapProcessor cityMapProcessor) {
+    this.cityMapProcessor = cityMapProcessor;
     this.citySearchTrie = citySearchTrie;
   }
 
@@ -31,7 +31,7 @@ public class SuggestionService {
         .map(citySearchTrie::suggest)
         .map(suggestedGeoIds -> {
           Map<Integer, City> suggestedMap = new LinkedHashMap<>();
-          suggestedGeoIds.forEach(key -> suggestedMap.put(key, cityHashMap.getCityMap().get(key)));
+          suggestedGeoIds.forEach(key -> suggestedMap.put(key, cityMapProcessor.getCityMap().get(key)));
           return suggestedMap;
         })
         .orElse(Collections.emptyMap());
